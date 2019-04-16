@@ -318,7 +318,9 @@ void Game::draw(ALLEGRO_DISPLAY *display) {
 			al_draw_text(fuente, al_map_rgb(0, 0, 0), 300, 200, ALLEGRO_ALIGN_CENTER, "PERDISTE!");
 			al_flip_display();
 			al_rest(4);
+			al_clear_to_color(al_map_rgb(0, 0, 0));
 			cambiarPantalla(0);
+			this->draw(display);
 		}
 
 		if (contador > tiempo) {
