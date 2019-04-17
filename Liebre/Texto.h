@@ -5,7 +5,7 @@
 class Texto
 {
 public:
-	int x, y;
+	int pocicionX, y;
 	std::string contenido;
 	Texto(std::string contenido);
 	Texto();

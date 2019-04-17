@@ -1,9 +1,9 @@
 #include "pch.h"
-#include "Game.h"
-Game::Game() {}
-Game::~Game() {}
+#include "Singleton.h"
+Singleton::Singleton() {}
+Singleton::~Singleton() {}
 
-void Game::initialize() {
+void Singleton::IniciarValiarbles() {
 	dibujar = true;
 	comenzarContador = false;
 	contador = 0;
@@ -18,7 +18,7 @@ void Game::initialize() {
 		impmuertes = al_load_font("big_noodle_titling.ttf", 25, NULL);
 		fuente = al_load_font("earwig factory rg.ttf", 66, NULL);
 		matrix = std::vector< std::vector<const char*> >(5);
-		temp = std::vector< std::vector<Nodo*> >(5);
+		temp = std::vector< std::vector<Vertice*> >(5);
 		mapa = al_load_bitmap("tablero.png");
 		jugador = al_load_bitmap("fichaPerro.png");
 		iaBitmap = al_load_bitmap("fichaGato.png");
@@ -43,7 +43,7 @@ void Game::initialize() {
 	}
 }
 
-void Game::update(ALLEGRO_EVENT ev, bool *done) {
+void Singleton::refrescar(ALLEGRO_EVENT ev, bool *done) {
 	switch (pantalla) {
 		case 0: // Menu
 		{
@@ -58,10 +58,10 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 						if (mouseY >= texto->y && mouseY <= texto->y + 35) {
 							switch (i) {
 							case 0:
-								this->cambiarPantalla(3);
+								this->ControladorScreen(3);
 								break;
 							case 1:
-								this->cambiarPantalla(2);
+								this->ControladorScreen(2);
 								break;
 							case 2:
 								*done = true;
@@ -90,10 +90,10 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 		case 1:
 		{
 			if (input.isKeyPressed(ev, ALLEGRO_KEY_BACKSPACE)) {
-				cambiarPantalla(0);
+				ControladorScreen(0);
 			}
 			if (input.isKeyPressed(ev, ALLEGRO_KEY_F5)) {
-				cambiarPantalla(1);
+				ControladorScreen(1);
 			}
 			if ( this->turno == true && this->mato==false)
 			{
@@ -102,52 +102,51 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 					{
 						int mouseX = ev.mouse.x;
 						int mouseY = ev.mouse.y;
-						Nodo* aux = this->ptr, * aux2 = NULL;
+						Vertice* aux = this->ptr, * aux2 = NULL;
 						while (aux != NULL) {
 							while (aux != NULL) {
-								if (aux->ficha == 1) {
-									if (mouseX > aux->x && mouseX < aux->x + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
-										
+								if (aux->personaje == 1) {
+									if (mouseX > aux->pocicionX && mouseX < aux->pocicionX + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
 										select = aux;
 										dibujar = true;
 									}
 								}
-								else if (aux->ficha == 0 && select != NULL && esAdyancente(select, aux)) {
-									if (mouseX > aux->x && mouseX < aux->x + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
-										aux->ficha = select->ficha;
-										select->ficha = 0;
+								else if (aux->personaje == 0 && select != NULL && isConectado(select, aux)) {
+									if (mouseX > aux->pocicionX && mouseX < aux->pocicionX + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
+										aux->personaje = select->personaje;
+										select->personaje = 0;
 										select = NULL;
 										dibujar = true;
 										this->turno = false;
 									}
 								}
 								aux2 = aux;
-								aux = aux->der;
+								aux = aux->este;
 							}
 							aux = aux2;
-							if (aux->abj == NULL)break;
-							aux = aux->abj;
+							if (aux->sur == NULL)break;
+							aux = aux->sur;
 							while (aux != NULL) {
-								if (aux->ficha == 1) {
-									if (mouseX > aux->x && mouseX < aux->x + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
+								if (aux->personaje == 1) {
+									if (mouseX > aux->pocicionX && mouseX < aux->pocicionX + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
 										select = aux;
 										dibujar = true;
 									}
 								}
-								else if (aux->ficha == 0 && select != NULL && esAdyancente(select, aux)) {
-									if (mouseX > aux->x && mouseX < aux->x + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
-										aux->ficha = select->ficha;
-										select->ficha = 0;
+								else if (aux->personaje == 0 && select != NULL && isConectado(select, aux)) {
+									if (mouseX > aux->pocicionX && mouseX < aux->pocicionX + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
+										aux->personaje = select->personaje;
+										select->personaje = 0;
 										select = NULL;
 										dibujar = true;
 										this->turno = false;
 									}
 								}
 								aux2 = aux;
-								aux = aux->izq;
+								aux = aux->oeste;
 							}
 							aux = aux2;
-							aux = aux->abj;
+							aux = aux->sur;
 						}
 						if (select != NULL && !dibujar) {
 							select = NULL;
@@ -158,61 +157,61 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 			}
 			else {
 				this->mato = false;
-				matar();
+				robar();
 				if (this->mato == false && turno == false) {
 
-					std::vector<Nodo*> aleatorio = std::vector<Nodo*>();
-					if (this->gato->der != NULL) {
-						if (this->gato->der->ficha == 0) {
-							aleatorio.push_back(this->gato->der);
+					std::vector<Vertice*> aleatorio = std::vector<Vertice*>();
+					if (this->gato->este != NULL) {
+						if (this->gato->este->personaje == 0) {
+							aleatorio.push_back(this->gato->este);
 						}
 					}
-					if (this->gato->dig_inf_der != NULL) {
-						if (this->gato->dig_inf_der->ficha == 0) {
-							aleatorio.push_back(this->gato->dig_inf_der);
+					if (this->gato->sureste != NULL) {
+						if (this->gato->sureste->personaje == 0) {
+							aleatorio.push_back(this->gato->sureste);
 						}
 					}
-					if (this->gato->abj != NULL) {
-						if (this->gato->abj->ficha == 0) {
-							aleatorio.push_back(this->gato->abj);
+					if (this->gato->sur != NULL) {
+						if (this->gato->sur->personaje == 0) {
+							aleatorio.push_back(this->gato->sur);
 						}
 					}
-					if (this->gato->dig_inf_izq != NULL) {
-						if (this->gato->dig_inf_izq->ficha == 0) {
-							aleatorio.push_back(this->gato->dig_inf_izq);
+					if (this->gato->suroeste != NULL) {
+						if (this->gato->suroeste->personaje == 0) {
+							aleatorio.push_back(this->gato->suroeste);
 						}
 					}
-					if (this->gato->izq != NULL) {
-						if (this->gato->izq->ficha == 0) {
-							aleatorio.push_back(this->gato->izq);
+					if (this->gato->oeste != NULL) {
+						if (this->gato->oeste->personaje == 0) {
+							aleatorio.push_back(this->gato->oeste);
 						}
 					}
-					if (this->gato->dig_sup_izq != NULL) {
-						if (this->gato->dig_sup_izq->ficha == 0) {
-							aleatorio.push_back(this->gato->dig_sup_izq);
+					if (this->gato->noroeste != NULL) {
+						if (this->gato->noroeste->personaje == 0) {
+							aleatorio.push_back(this->gato->noroeste);
 						}
 					}
-					if (this->gato->arb != NULL) {
-						if (this->gato->arb->ficha == 0) {
-							aleatorio.push_back(this->gato->arb);
+					if (this->gato->norte != NULL) {
+						if (this->gato->norte->personaje == 0) {
+							aleatorio.push_back(this->gato->norte);
 						}
 					}
-					if (this->gato->dig_sup_der != NULL) {
-						if (this->gato->dig_sup_der->ficha == 0) {
-							aleatorio.push_back(this->gato->dig_sup_der);
+					if (this->gato->noreste != NULL) {
+						if (this->gato->noreste->personaje == 0) {
+							aleatorio.push_back(this->gato->noreste);
 						}
 					}
 					if (aleatorio.size() != 0) {
-						this->gato->ficha = 0;
+						this->gato->personaje = 0;
 						int indice = rand() % aleatorio.size();
-						aleatorio[indice]->ficha = 2;
+						aleatorio[indice]->personaje = 2;
 						this->gato = aleatorio[indice];
 					}
 					else {
 						al_draw_text(fuente, al_map_rgb(214, 19, 36), 300, 200, ALLEGRO_ALIGN_CENTER, "GANASTE!");
 						al_flip_display();
 						al_rest(5);
-						cambiarPantalla(0);
+						ControladorScreen(0);
 					}
 				}
 				this->piensa = true;
@@ -227,7 +226,7 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 		case 2:
 		{
 			if (input.isKeyPressed(ev, ALLEGRO_KEY_BACKSPACE)) {
-				cambiarPantalla(0);
+				ControladorScreen(0);
 			}
 			break;
 		}
@@ -243,7 +242,7 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 						for (int j = 0; j < 2; j++) {
 							if (mouseX > 89 + (332 * i) && mouseX < 89 + (332 * i) + 153 && mouseY > 88 + (216 * j) && mouseY < 88 + (216 * j) + 153) {
 								orientacion = i + j*2;
-								cambiarPantalla(1);
+								ControladorScreen(1);
 							}
 						}
 					}
@@ -254,7 +253,7 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 	}
 }
 
-void Game::draw(ALLEGRO_DISPLAY *display) {
+void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 	switch (pantalla) {
 	case 0: {
 		al_draw_bitmap(fondo, 0, 0, NULL);
@@ -274,7 +273,7 @@ void Game::draw(ALLEGRO_DISPLAY *display) {
 	case 1: {
 		// dibujo el fondo
 		al_draw_bitmap(mapa, 0, 0, NULL);
-		Nodo* aux = this->ptr, *aux2 = NULL;
+		Vertice* aux = this->ptr, *aux2 = NULL;
 		if (this->piensa == true) {
 			al_rest(0.8);
 			piensa = false;
@@ -282,38 +281,38 @@ void Game::draw(ALLEGRO_DISPLAY *display) {
 		// recorro los nodos y los dibujo 
 		while (aux != NULL) {
 			while (aux != NULL) {
-				if (aux->ficha == 1) {
-					al_draw_bitmap(jugador, aux->x, aux->y, ALLEGRO_ALIGN_CENTER);
+				if (aux->personaje == 1) {
+					al_draw_bitmap(jugador, aux->pocicionX, aux->y, ALLEGRO_ALIGN_CENTER);
 				}
-				else if (aux->ficha == 2) {
-					al_draw_bitmap(iaBitmap, aux->x, aux->y, ALLEGRO_ALIGN_CENTER);
+				else if (aux->personaje == 2) {
+					al_draw_bitmap(iaBitmap, aux->pocicionX, aux->y, ALLEGRO_ALIGN_CENTER);
 				}
 				else if (select != NULL) {
-					if (esAdyancente(select, aux))
-						al_draw_bitmap(libre, aux->x, aux->y, ALLEGRO_ALIGN_CENTER);
+					if (isConectado(select, aux))
+						al_draw_bitmap(libre, aux->pocicionX, aux->y, ALLEGRO_ALIGN_CENTER);
 				}
 				aux2 = aux;
-				aux = aux->der;
+				aux = aux->este;
 			}
 			aux = aux2;
-			if (aux->abj == NULL)break;
-			aux = aux->abj;
+			if (aux->sur == NULL)break;
+			aux = aux->sur;
 			while (aux != NULL) {
-				if (aux->ficha == 1) {
-					al_draw_bitmap(jugador, aux->x, aux->y, ALLEGRO_ALIGN_CENTER);
+				if (aux->personaje == 1) {
+					al_draw_bitmap(jugador, aux->pocicionX, aux->y, ALLEGRO_ALIGN_CENTER);
 				}
-				else if (aux->ficha == 2) {
-					al_draw_bitmap(iaBitmap, aux->x, aux->y, ALLEGRO_ALIGN_CENTER);
+				else if (aux->personaje == 2) {
+					al_draw_bitmap(iaBitmap, aux->pocicionX, aux->y, ALLEGRO_ALIGN_CENTER);
 				}
 				else if (select != NULL) {
-					if (esAdyancente(select, aux))
-						al_draw_bitmap(libre, aux->x, aux->y, ALLEGRO_ALIGN_CENTER);
+					if (isConectado(select, aux))
+						al_draw_bitmap(libre, aux->pocicionX, aux->y, ALLEGRO_ALIGN_CENTER);
 				}
 				aux2 = aux;
-				aux = aux->izq;
+				aux = aux->oeste;
 			}
 			aux = aux2;
-			aux = aux->abj;
+			aux = aux->sur;
 		}
 		al_draw_textf(impmuertes, al_map_rgb(0, 0, 0), 355, 10, ALLEGRO_ALIGN_LEFT, "Robados: %d", this->muertes);
 		if (muertes >= 3) {
@@ -322,21 +321,21 @@ void Game::draw(ALLEGRO_DISPLAY *display) {
 			al_flip_display();
 			al_rest(4);
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			cambiarPantalla(0);
-			this->draw(display);
+			ControladorScreen(0);
+			this->refrescarPantalla(display);
 		}
 
 		if (contador > tiempo) {
 			al_draw_text(fuente, al_map_rgb(0, 0, 0), 300, 200, ALLEGRO_ALIGN_CENTER, "TIME OUT!");
 			al_flip_display();
 			al_rest(2);
-			cambiarPantalla(0);
+			ControladorScreen(0);
 		}
 		break;
 	}
 	case 2: {
 		//acá debes escribir las reglas
-		al_draw_multiline_text(fuente, al_map_rgb(255, 0, 255), 300, 40, 550, 25, ALLEGRO_ALIGN_CENTER, "viendo a ATRAPA EL GATO, en este juego tu mision es atrapar al gato con los perros. pero no te cnfies el gato es muy escurridizo y si te confias matara a tus perros y perderas el juego ");
+		al_draw_multiline_text(fuente, al_map_rgb(255, 0, 255), 300, 40, 550, 25, ALLEGRO_ALIGN_CENTER, "viendo ficha1 ATRAPA EL GATO, en este juego tu mision es atrapar al gato con los perros. pero no te cnfies el gato es muy escurridizo y si te confias matara ficha1 tus perros y perderas el juego ");
 		break;
 	}
 	case 3: {
@@ -351,7 +350,7 @@ void Game::draw(ALLEGRO_DISPLAY *display) {
 
 }
 
-void Game::loadContent(){
+void Singleton::traerContenido(){
 	switch (pantalla) {
 	case 0: {
 		// creando las opciones del menu
@@ -361,7 +360,7 @@ void Game::loadContent(){
 		int i = 0;
 		// colocando la posición de las opciones de menu
 		for (auto texto : *menu) {
-			texto->x = 320;
+			texto->pocicionX = 320;
 			texto->y = 140 + 70 * i;
 			i++;
 		}
@@ -512,13 +511,13 @@ void Game::loadContent(){
 		for (int i = 0; i < 5; i++)
 		{
 			for (int j = 0; j < 5; j++) {
-				// conversión de string a entero de la matrix
+				// conversión de string ficha1 entero de la matrix
 				std::stringstream strValue;
 				strValue << matrix[i][j][0];
 				int intValue;
 				strValue >> intValue;
 				// creación del nodo su distancia(margin) y su posición de la esquina
-				temp[i][j] = new Nodo((j * margin) + posX, (i * margin) + posY, intValue);
+				temp[i][j] = new Vertice((j * margin) + posX, (i * margin) + posY, intValue);
 			}
 		}
 		this->gato = temp[2][2];
@@ -530,29 +529,29 @@ void Game::loadContent(){
 				if (matrix[i][j][1] == '/') {
 					//derecha
 					if (j + 1 < 5) { 
-						CrearCamino(temp[i][j], temp[i][j + 1], 0);
+						ConectarApuntadores(temp[i][j], temp[i][j + 1], 0);
 					}
 					//diagonal derecha inferior
 					if ((j + 1 < 5) && (i + 1 < 5)) {
-						CrearCamino(temp[i][j], temp[i + 1][j + 1], 1);
+						ConectarApuntadores(temp[i][j], temp[i + 1][j + 1], 1);
 					}
 					//abajo
 					if (i + 1 < 5) {
-						CrearCamino(temp[i][j], temp[i + 1][j], 2);
+						ConectarApuntadores(temp[i][j], temp[i + 1][j], 2);
 					}
 					//diagonal inferior izquierda
 					if ((i + 1) < 5 && (j - 1) > -1) {
-						CrearCamino(temp[i][j], temp[i + 1][j - 1], 3);
+						ConectarApuntadores(temp[i][j], temp[i + 1][j - 1], 3);
 					}
 				}
 				else {
 					//derecha
 					if (j + 1 < 5) {
-						CrearCamino(temp[i][j], temp[i][j + 1], 0);
+						ConectarApuntadores(temp[i][j], temp[i][j + 1], 0);
 					}
 					//abajo
 					if (i + 1 < 5) {
-						CrearCamino(temp[i][j], temp[i + 1][j], 2);
+						ConectarApuntadores(temp[i][j], temp[i + 1][j], 2);
 					}
 				}
 			}
@@ -567,7 +566,7 @@ void Game::loadContent(){
 }
 
 //quitar el contenido
-void Game::unLoadContent() {
+void Singleton::destruirContenido() {
 	switch (pantalla) {
 	case 0:
 		free(menu);
@@ -599,113 +598,113 @@ void Game::unLoadContent() {
 }
 
 // mata 
-void Game::matar() {
-	if (this->gato->der != NULL && mato==false) {
-		if (this->gato->der->ficha == 1) {
-			if (this->gato->der->der != NULL) {
-				if (this->gato->der->der->ficha == 0) {
-					this->gato->der->ficha = 0;
-					this->gato->ficha = 0;
-					this->gato->der->der->ficha = 2;
-					this->gato = this->gato->der->der;
+void Singleton::robar() {
+	if (this->gato->este != NULL && mato==false) {
+		if (this->gato->este->personaje == 1) {
+			if (this->gato->este->este != NULL) {
+				if (this->gato->este->este->personaje == 0) {
+					this->gato->este->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->este->este->personaje = 2;
+					this->gato = this->gato->este->este;
 					this->turno = true;
 					this->mato = true;	
 				}
 			}
 		}
 	}
-	if (this->gato->dig_inf_der != NULL && mato == false) {
-		if (this->gato->dig_inf_der->ficha == 1) {
-			if (this->gato->dig_inf_der->dig_inf_der != NULL) {
-				if (this->gato->dig_inf_der->dig_inf_der->ficha == 0) {
-					this->gato->dig_inf_der->ficha = 0;
-					this->gato->ficha = 0;
-					this->gato->dig_inf_der->dig_inf_der->ficha = 2;
-					this->gato = this->gato->dig_inf_der->dig_inf_der;
+	if (this->gato->sureste != NULL && mato == false) {
+		if (this->gato->sureste->personaje == 1) {
+			if (this->gato->sureste->sureste != NULL) {
+				if (this->gato->sureste->sureste->personaje == 0) {
+					this->gato->sureste->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->sureste->sureste->personaje = 2;
+					this->gato = this->gato->sureste->sureste;
 					this->turno = true;
 					this->mato = true;
 				}
 			}
 		}
 	}
-	if (this->gato->abj != NULL && mato == false) {
-		if (this->gato->abj->ficha == 1) {
-			if (this->gato->abj->abj != NULL) {
-				if (this->gato->abj->abj->ficha == 0) {
-					this->gato->abj->ficha = 0;
-					this->gato->ficha = 0;
-					this->gato->abj->abj->ficha = 2;
-					this->gato = this->gato->abj->abj;
+	if (this->gato->sur != NULL && mato == false) {
+		if (this->gato->sur->personaje == 1) {
+			if (this->gato->sur->sur != NULL) {
+				if (this->gato->sur->sur->personaje == 0) {
+					this->gato->sur->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->sur->sur->personaje = 2;
+					this->gato = this->gato->sur->sur;
 					this->turno = true;
 					this->mato = true;
 				}
 			}
 		}
 	}
-	if (this->gato->dig_inf_izq != NULL && mato == false) {
-		if (this->gato->dig_inf_izq->ficha == 1) {
-			if (this->gato->dig_inf_izq->dig_inf_izq != NULL) {
-				if (this->gato->dig_inf_izq->dig_inf_izq->ficha == 0) {
-					this->gato->dig_inf_izq->ficha = 0;
-					this->gato->ficha = 0;
-					this->gato->dig_inf_izq->dig_inf_izq->ficha = 2;
-					this->gato = this->gato->dig_inf_izq->dig_inf_izq;
+	if (this->gato->suroeste != NULL && mato == false) {
+		if (this->gato->suroeste->personaje == 1) {
+			if (this->gato->suroeste->suroeste != NULL) {
+				if (this->gato->suroeste->suroeste->personaje == 0) {
+					this->gato->suroeste->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->suroeste->suroeste->personaje = 2;
+					this->gato = this->gato->suroeste->suroeste;
 					this->turno = true;
 					this->mato = true;
 				}
 			}
 		}
 	}
-	if (this->gato->izq != NULL && mato == false) {
-		if (this->gato->izq->ficha == 1) {
-			if (this->gato->izq->izq != NULL) {
-				if (this->gato->izq->izq->ficha == 0) {
-					this->gato->izq->ficha = 0;
-					this->gato->ficha = 0;
-					this->gato->izq->izq->ficha = 2;
-					this->gato = this->gato->izq->izq;
+	if (this->gato->oeste != NULL && mato == false) {
+		if (this->gato->oeste->personaje == 1) {
+			if (this->gato->oeste->oeste != NULL) {
+				if (this->gato->oeste->oeste->personaje == 0) {
+					this->gato->oeste->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->oeste->oeste->personaje = 2;
+					this->gato = this->gato->oeste->oeste;
 					this->turno = true;
 					this->mato = true;
 				}
 			}
 		}
 	}
-	if (this->gato->dig_sup_izq != NULL && mato == false) {
-		if (this->gato->dig_sup_izq->ficha == 1) {
-			if (this->gato->dig_sup_izq->dig_sup_izq != NULL) {
-				if (this->gato->dig_sup_izq->dig_sup_izq->ficha == 0) {
-					this->gato->dig_sup_izq->ficha = 0;
-					this->gato->ficha = 0;
-					this->gato->dig_sup_izq->dig_sup_izq->ficha = 2;
-					this->gato = this->gato->dig_sup_izq->dig_sup_izq;
+	if (this->gato->noroeste != NULL && mato == false) {
+		if (this->gato->noroeste->personaje == 1) {
+			if (this->gato->noroeste->noroeste != NULL) {
+				if (this->gato->noroeste->noroeste->personaje == 0) {
+					this->gato->noroeste->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->noroeste->noroeste->personaje = 2;
+					this->gato = this->gato->noroeste->noroeste;
 					this->turno = true;
 					this->mato = true;
 				}
 			}
 		}
 	}
-	if (this->gato->arb != NULL && mato == false) {
-		if (this->gato->arb->ficha == 1) {
-			if (this->gato->arb->arb != NULL) {
-				if (this->gato->arb->arb->ficha == 0) {
-					this->gato->arb->ficha = 0;
-					this->gato->ficha = 0;
-					this->gato->arb->arb->ficha = 2;
-					this->gato = this->gato->arb->arb;
+	if (this->gato->norte != NULL && mato == false) {
+		if (this->gato->norte->personaje == 1) {
+			if (this->gato->norte->norte != NULL) {
+				if (this->gato->norte->norte->personaje == 0) {
+					this->gato->norte->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->norte->norte->personaje = 2;
+					this->gato = this->gato->norte->norte;
 					this->turno = true;
 					this->mato = true;
 				}
 			}
 		}
 	}
-	if (this->gato->dig_sup_der != NULL && mato == false) {
-		if (this->gato->dig_sup_der->ficha == 1) {
-			if (this->gato->dig_sup_der->dig_sup_der != NULL) {
-				if (this->gato->dig_sup_der->dig_sup_der->ficha == 0) {
-					this->gato->dig_sup_der->ficha = 0;
-					this->gato->ficha = 0;
-					this->gato->dig_sup_der->dig_sup_der->ficha = 2;
-					this->gato = this->gato->dig_sup_der->dig_sup_der;
+	if (this->gato->noreste != NULL && mato == false) {
+		if (this->gato->noreste->personaje == 1) {
+			if (this->gato->noreste->noreste != NULL) {
+				if (this->gato->noreste->noreste->personaje == 0) {
+					this->gato->noreste->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->noreste->noreste->personaje = 2;
+					this->gato = this->gato->noreste->noreste;
 					this->turno = true;
 					this->mato = true;
 				}
@@ -718,62 +717,62 @@ void Game::matar() {
 }
 
 // recuperar el singleton
-Game &Game::GetInstance()
+Singleton &Singleton::recuperarSingleton()
 {
-	static Game instance;
+	static Singleton instance;
 	return instance;
 }
 
-// función para cambiar pantalla
-void Game::cambiarPantalla(int pantalla) {
-	this->unLoadContent();
-	this->pantalla = pantalla;
-	this->initialize();
-	this->loadContent();
+// función para cambiar screen
+void Singleton::ControladorScreen(int screen) {
+	this->destruirContenido();
+	this->pantalla = screen;
+	this->IniciarValiarbles();
+	this->traerContenido();
 	dibujar = true;
 }
 
 // función para crear un camino de doble vía
-void Game::CrearCamino(Nodo* a, Nodo* b, int dire) {
-	switch (dire)
+void Singleton::ConectarApuntadores(Vertice* ficha1, Vertice* ficha2, int direccion) {
+	switch (direccion)
 	{
 	case 0:
-		a->der = b;
-		b->izq = a;
+		ficha1->este = ficha2;
+		ficha2->oeste = ficha1;
 		break;
 	case 1:
-		a->dig_inf_der = b;
-		b->dig_sup_izq = a;
+		ficha1->sureste = ficha2;
+		ficha2->noroeste = ficha1;
 		break;
 	case 2:
-		a->abj = b;
-		b->arb = a;
+		ficha1->sur = ficha2;
+		ficha2->norte = ficha1;
 		break;
 	case 3:
-		a->dig_inf_izq = b;
-		b->dig_sup_der = a;
+		ficha1->suroeste = ficha2;
+		ficha2->noreste = ficha1;
 		break;
 	case 4:
-		a->izq = b;
-		b->der = a;
+		ficha1->oeste = ficha2;
+		ficha2->este = ficha1;
 		break;
 	case 5:
-		a->dig_sup_izq = b;
-		b->dig_inf_der = a;
+		ficha1->noroeste = ficha2;
+		ficha2->sureste = ficha1;
 		break;
 	case 6:
-		a->arb = b;
-		b->abj = a;
+		ficha1->norte = ficha2;
+		ficha2->sur = ficha1;
 		break;
 	case 7:
-		a->dig_sup_der = b;
-		b->dig_inf_izq = a;
+		ficha1->noreste = ficha2;
+		ficha2->suroeste = ficha1;
 		break;
 	default:
 		break;
 	}
 }
 
-bool Game::esAdyancente(Nodo *seleccionada, Nodo *b) {
-	return (seleccionada->abj == b || seleccionada->der == b || seleccionada->izq == b ||  seleccionada->arb == b || seleccionada->dig_inf_der == b || seleccionada->dig_inf_izq == b || seleccionada->dig_sup_der == b || seleccionada->dig_sup_izq == b);
+bool Singleton::isConectado(Vertice *seleccionada, Vertice *b) {
+	return (seleccionada->sur == b || seleccionada->este == b || seleccionada->oeste == b ||  seleccionada->norte == b || seleccionada->sureste == b || seleccionada->suroeste == b || seleccionada->noreste == b || seleccionada->noroeste == b);
 }

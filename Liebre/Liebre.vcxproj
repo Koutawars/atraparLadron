@@ -167,18 +167,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Liebre.h" />
-    <ClInclude Include="Nodo.h" />
+    <ClInclude Include="vertice.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Texto.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="Liebre.cpp" />
-    <ClCompile Include="Nodo.cpp" />
+    <ClCompile Include="Ladron.cpp" />
+    <ClCompile Include="vertice.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
