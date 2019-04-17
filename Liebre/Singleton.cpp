@@ -154,6 +154,9 @@ void Singleton::refrescar(ALLEGRO_EVENT ev, bool *done) {
 							select = NULL;
 							dibujar = true;
 						}
+
+						if (mouseX > 552 && mouseX < 625 && mouseY > 440 && mouseY < 470)
+							ControladorScreen(0);
 					}
 				}
 			}
