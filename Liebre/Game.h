@@ -33,6 +33,8 @@ public:
 
 	/*------------- Menu ------------*/
 	std::vector<Texto*> *menu; // vector de Texto para el menu
+	ALLEGRO_BITMAP *fondo;
+	ALLEGRO_FONT *fuente2;
 	/*------------- Menu ------------*/
 
 	/*------------Pantalla-----------*/

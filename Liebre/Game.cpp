@@ -10,7 +10,9 @@ void Game::initialize() {
 	switch (pantalla) {
 	case 0:
 		this->menu = new std::vector<Texto*>();
-		fuente = al_load_font("big_noodle_titling.ttf", 36, NULL);
+		fuente = al_load_font("earwig factory rg.ttf", 36, NULL);
+		fuente2 = al_load_font("earwig factory rg.ttf", 45, NULL);
+		fondo = al_load_bitmap("fondo.png");
 		break;
 	case 1:
 		impmuertes = al_load_font("big_noodle_titling.ttf", 20, NULL);
@@ -104,14 +106,14 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 						while (aux != NULL) {
 							while (aux != NULL) {
 								if (aux->ficha == 1) {
-									if (mouseX > aux->x && mouseX < aux->x + 35 && mouseY > aux->y && mouseY < aux->y + 35) {
+									if (mouseX > aux->x && mouseX < aux->x + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
 										std::cout << aux->imprimir() << std::endl;
 										select = aux;
 										dibujar = true;
 									}
 								}
 								else if (aux->ficha == 0 && select != NULL && esAdyancente(select, aux)) {
-									if (mouseX > aux->x && mouseX < aux->x + 35 && mouseY > aux->y && mouseY < aux->y + 35) {
+									if (mouseX > aux->x && mouseX < aux->x + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
 										aux->ficha = select->ficha;
 										select->ficha = 0;
 										select = NULL;
@@ -127,13 +129,13 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 							aux = aux->abj;
 							while (aux != NULL) {
 								if (aux->ficha == 1) {
-									if (mouseX > aux->x && mouseX < aux->x + 35 && mouseY > aux->y && mouseY < aux->y + 35) {
+									if (mouseX > aux->x && mouseX < aux->x + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
 										select = aux;
 										dibujar = true;
 									}
 								}
 								else if (aux->ficha == 0 && select != NULL && esAdyancente(select, aux)) {
-									if (mouseX > aux->x && mouseX < aux->x + 35 && mouseY > aux->y && mouseY < aux->y + 35) {
+									if (mouseX > aux->x && mouseX < aux->x + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
 										aux->ficha = select->ficha;
 										select->ficha = 0;
 										select = NULL;
@@ -256,12 +258,14 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 void Game::draw(ALLEGRO_DISPLAY *display) {
 	switch (pantalla) {
 	case 0: {
+		al_draw_bitmap(fondo, 0, 0, NULL);
+		al_draw_filled_rectangle(220, 100, 420, 350, al_map_rgba(0, 0, 0, 255*0.5));
 		int i = 0;
 		// recorrer el menu
 		for (auto texto : *menu) {
 			// se pinta de diferente color si esta seleccionado 
 			if(texto->select)
-				texto->draw(fuente, 255, 0, 255, ALLEGRO_ALIGN_CENTER);
+				texto->draw(fuente2, 214, 19, 36, ALLEGRO_ALIGN_CENTER);
 			else
 				texto->draw(fuente, 255, 255, 255, ALLEGRO_ALIGN_CENTER);
 			i++;
@@ -312,10 +316,10 @@ void Game::draw(ALLEGRO_DISPLAY *display) {
 			aux = aux2;
 			aux = aux->abj;
 		}
-		al_draw_textf(impmuertes, al_map_rgb(0, 0, 0),550, 20, ALLEGRO_ALIGN_LEFT, "muertos: %d", this->muertes);
+		al_draw_textf(impmuertes, al_map_rgb(0, 0, 0), 355, 10, ALLEGRO_ALIGN_LEFT, "Robados: %d", this->muertes);
 		if (muertes >= 3) {
 			al_rest(0.5);
-			al_draw_text(fuente, al_map_rgb(0, 0, 0), 300, 200, ALLEGRO_ALIGN_CENTER, "PERDISTE!");
+			al_draw_text(fuente, al_map_rgb(240, 29, 37), 300, 200, ALLEGRO_ALIGN_CENTER, "PERDISTE!");
 			al_flip_display();
 			al_rest(4);
 			al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -358,8 +362,8 @@ void Game::loadContent(){
 		int i = 0;
 		// colocando la posición de las opciones de menu
 		for (auto texto : *menu) {
-			texto->x = 100;
-			texto->y = 140 + 60 * i;
+			texto->x = 320;
+			texto->y = 140 + 70 * i;
 			i++;
 		}
 		break;
@@ -370,7 +374,7 @@ void Game::loadContent(){
 			matrix[i].resize(5);
 		for (int i = 0; i < 5; i++)
 			temp[i].resize(5);
-		int margin = 90, posX = 120, posY = 46;
+		int margin = 96, posX = 16, posY = 36;
 
 		// creación del mapa
 		switch (this->orientacion)
@@ -575,6 +579,8 @@ void Game::unLoadContent() {
 	case 0:
 		free(menu);
 		al_destroy_font(fuente);
+		al_destroy_bitmap(fondo);
+		al_destroy_font(fuente2);
 		break;
 	case 1:
 		al_destroy_bitmap(mapa);
