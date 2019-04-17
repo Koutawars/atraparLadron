@@ -23,6 +23,8 @@ void Singleton::IniciarValiarbles() {
 		jugador = al_load_bitmap("fichaPerro.png");
 		iaBitmap = al_load_bitmap("fichaGato.png");
 		libre = al_load_bitmap("libre.png");
+		ganaste = al_load_bitmap("ganaste.png");
+		perdiste = al_load_bitmap("perdiste.png");
 		select = NULL;
 		turno = true;
 		muertes = 0;
@@ -208,7 +210,8 @@ void Singleton::refrescar(ALLEGRO_EVENT ev, bool *done) {
 						this->gato = aleatorio[indice];
 					}
 					else {
-						al_draw_text(fuente, al_map_rgb(214, 19, 36), 300, 200, ALLEGRO_ALIGN_CENTER, "GANASTE!");
+						al_rest(0.5);
+						al_draw_bitmap(ganaste, 0, 0, NULL);
 						al_flip_display();
 						al_rest(5);
 						ControladorScreen(0);
@@ -317,7 +320,7 @@ void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 		al_draw_textf(impmuertes, al_map_rgb(0, 0, 0), 355, 10, ALLEGRO_ALIGN_LEFT, "Robados: %d", this->muertes);
 		if (muertes >= 3) {
 			al_rest(0.5);
-			al_draw_text(fuente, al_map_rgb(240, 29, 37), 300, 200, ALLEGRO_ALIGN_CENTER, "PERDISTE!");
+			al_draw_bitmap(perdiste, 0, 0, NULL);
 			al_flip_display();
 			al_rest(4);
 			al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -334,7 +337,7 @@ void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 		break;
 	}
 	case 2: {
-		//acá debes escribir las reglas
+		//acï¿½ debes escribir las reglas
 		al_draw_multiline_text(fuente, al_map_rgb(255, 0, 255), 300, 40, 550, 25, ALLEGRO_ALIGN_CENTER, "viendo ficha1 ATRAPA EL GATO, en este juego tu mision es atrapar al gato con los perros. pero no te cnfies el gato es muy escurridizo y si te confias matara ficha1 tus perros y perderas el juego ");
 		break;
 	}
@@ -358,7 +361,7 @@ void Singleton::traerContenido(){
 		menu->push_back(new Texto("Creadores"));
 		menu->push_back(new Texto("Salir"));
 		int i = 0;
-		// colocando la posición de las opciones de menu
+		// colocando la posiciï¿½n de las opciones de menu
 		for (auto texto : *menu) {
 			texto->pocicionX = 320;
 			texto->y = 140 + 70 * i;
@@ -374,7 +377,7 @@ void Singleton::traerContenido(){
 			temp[i].resize(5);
 		int margin = 96, posX = 16, posY = 36;
 
-		// creación del mapa
+		// creaciï¿½n del mapa
 		switch (this->orientacion)
 		{
 		case 0:
@@ -507,16 +510,16 @@ void Singleton::traerContenido(){
 		}
 
 		}
-		// creación de nodos
+		// creaciï¿½n de nodos
 		for (int i = 0; i < 5; i++)
 		{
 			for (int j = 0; j < 5; j++) {
-				// conversión de string ficha1 entero de la matrix
+				// conversiï¿½n de string ficha1 entero de la matrix
 				std::stringstream strValue;
 				strValue << matrix[i][j][0];
 				int intValue;
 				strValue >> intValue;
-				// creación del nodo su distancia(margin) y su posición de la esquina
+				// creaciï¿½n del nodo su distancia(margin) y su posiciï¿½n de la esquina
 				temp[i][j] = new Vertice((j * margin) + posX, (i * margin) + posY, intValue);
 			}
 		}
@@ -580,6 +583,7 @@ void Singleton::destruirContenido() {
 		al_destroy_bitmap(iaBitmap);
 		al_destroy_bitmap(libre);
 		al_destroy_font(fuente);
+		al_destroy_bitmap(ganaste);
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
 				delete temp[i][j];
@@ -723,7 +727,7 @@ Singleton &Singleton::recuperarSingleton()
 	return instance;
 }
 
-// función para cambiar screen
+// funciï¿½n para cambiar screen
 void Singleton::ControladorScreen(int screen) {
 	this->destruirContenido();
 	this->pantalla = screen;
@@ -732,7 +736,7 @@ void Singleton::ControladorScreen(int screen) {
 	dibujar = true;
 }
 
-// función para crear un camino de doble vía
+// funciï¿½n para crear un camino de doble vï¿½a
 void Singleton::ConectarApuntadores(Vertice* ficha1, Vertice* ficha2, int direccion) {
 	switch (direccion)
 	{
