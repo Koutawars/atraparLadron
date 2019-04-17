@@ -66,6 +66,8 @@ public:
 	InputManager input;// input manager para las reclas
 	void matar(); //esto mata chabon
 
+	ALLEGRO_BITMAP *ganaste;
+	ALLEGRO_BITMAP *perdiste;
 	/*-----------mapa ptr----------*/
 
 	bool dibujar; // es verdadero cuando se quiere actualizar la pantalla

@@ -23,6 +23,8 @@ void Game::initialize() {
 		jugador = al_load_bitmap("fichaPerro.png");
 		iaBitmap = al_load_bitmap("fichaGato.png");
 		libre = al_load_bitmap("libre.png");
+		ganaste = al_load_bitmap("ganaste.png");
+		perdiste = al_load_bitmap("perdiste.png");
 		select = NULL;
 		turno = true;
 		muertes = 0;
@@ -160,7 +162,6 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 				this->mato = false;
 				matar();
 				if (this->mato == false && turno == false) {
-
 					std::vector<Nodo*> aleatorio = std::vector<Nodo*>();
 					if (this->gato->der != NULL) {
 						if (this->gato->der->ficha == 0) {
@@ -209,7 +210,8 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 						this->gato = aleatorio[indice];
 					}
 					else {
-						al_draw_text(fuente, al_map_rgb(214, 19, 36), 300, 200, ALLEGRO_ALIGN_CENTER, "GANASTE!");
+						al_rest(0.5);
+						al_draw_bitmap(ganaste, 0, 0, NULL);
 						al_flip_display();
 						al_rest(5);
 						cambiarPantalla(0);
@@ -318,10 +320,9 @@ void Game::draw(ALLEGRO_DISPLAY *display) {
 		al_draw_textf(impmuertes, al_map_rgb(0, 0, 0), 355, 10, ALLEGRO_ALIGN_LEFT, "Robados: %d", this->muertes);
 		if (muertes >= 3) {
 			al_rest(0.5);
-			al_draw_text(fuente, al_map_rgb(240, 29, 37), 300, 200, ALLEGRO_ALIGN_CENTER, "PERDISTE!");
+			al_draw_bitmap(perdiste, 0, 0, NULL);
 			al_flip_display();
 			al_rest(4);
-			al_clear_to_color(al_map_rgb(0, 0, 0));
 			cambiarPantalla(0);
 			this->draw(display);
 		}
@@ -581,6 +582,7 @@ void Game::unLoadContent() {
 		al_destroy_bitmap(iaBitmap);
 		al_destroy_bitmap(libre);
 		al_destroy_font(fuente);
+		al_destroy_bitmap(ganaste);
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
 				delete temp[i][j];
