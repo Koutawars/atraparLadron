@@ -15,8 +15,8 @@ void Game::initialize() {
 		fondo = al_load_bitmap("fondo.png");
 		break;
 	case 1:
-		impmuertes = al_load_font("big_noodle_titling.ttf", 20, NULL);
-		fuente = al_load_font("big_noodle_titling.ttf", 66, NULL);
+		impmuertes = al_load_font("big_noodle_titling.ttf", 25, NULL);
+		fuente = al_load_font("earwig factory rg.ttf", 66, NULL);
 		matrix = std::vector< std::vector<const char*> >(5);
 		temp = std::vector< std::vector<Nodo*> >(5);
 		mapa = al_load_bitmap("tablero.png");
@@ -107,7 +107,7 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 							while (aux != NULL) {
 								if (aux->ficha == 1) {
 									if (mouseX > aux->x && mouseX < aux->x + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
-										std::cout << aux->imprimir() << std::endl;
+										
 										select = aux;
 										dibujar = true;
 									}
@@ -209,7 +209,7 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 						this->gato = aleatorio[indice];
 					}
 					else {
-						al_draw_text(fuente, al_map_rgb(255, 255, 255), 300, 200, ALLEGRO_ALIGN_CENTER, "GANASTE!");
+						al_draw_text(fuente, al_map_rgb(214, 19, 36), 300, 200, ALLEGRO_ALIGN_CENTER, "GANASTE!");
 						al_flip_display();
 						al_rest(5);
 						cambiarPantalla(0);
@@ -243,7 +243,6 @@ void Game::update(ALLEGRO_EVENT ev, bool *done) {
 						for (int j = 0; j < 2; j++) {
 							if (mouseX > 89 + (332 * i) && mouseX < 89 + (332 * i) + 153 && mouseY > 88 + (216 * j) && mouseY < 88 + (216 * j) + 153) {
 								orientacion = i + j*2;
-								std::cout << orientacion << std::endl;
 								cambiarPantalla(1);
 							}
 						}
@@ -356,8 +355,8 @@ void Game::loadContent(){
 	switch (pantalla) {
 	case 0: {
 		// creando las opciones del menu
-		menu->push_back(new Texto("Iniciar"));
-		menu->push_back(new Texto("Reglas"));
+		menu->push_back(new Texto("Comenzar"));
+		menu->push_back(new Texto("Creadores"));
 		menu->push_back(new Texto("Salir"));
 		int i = 0;
 		// colocando la posición de las opciones de menu
@@ -559,13 +558,7 @@ void Game::loadContent(){
 			}
 		}
 		// imprimir matrix temporal
-		for (int i = 0; i < 5; i++)
-		{
-			for (int j = 0; j < 5; j++) {
-				std::cout << " [" << matrix[i][j] << "] ";
-			}
-			std::cout << std::endl;
-		}
+		
 		// colocando el primer nodo como padre
 		this->ptr = temp[0][0];
 		break;
