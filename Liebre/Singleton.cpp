@@ -34,7 +34,7 @@ void Singleton::IniciarValiarbles() {
 		break;
 
 	case 2:
-		fuente = al_load_font("big_noodle_titling.ttf", 20, NULL);
+		fuente = al_load_font("big_noodle_titling.ttf", 25, NULL);
 		break;
 	case 3:
 		orientacion = 0;
@@ -349,7 +349,7 @@ void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 	}
 	case 2: {
 		//ac� debes escribir las reglas
-		al_draw_multiline_text(fuente, al_map_rgb(255, 0, 255), 300, 40, 550, 25, ALLEGRO_ALIGN_CENTER, "viendo ficha1 ATRAPA EL GATO, en este juego tu mision es atrapar al gato con los perros. pero no te cnfies el gato es muy escurridizo y si te confias matara ficha1 tus perros y perderas el juego ");
+		al_draw_multiline_text(fuente, al_map_rgb(214, 19, 36), 300, 40, 550, 25, ALLEGRO_ALIGN_CENTER, "Integrantes \n\n Ernesto García Fernandez de castro 2018114029 \n Dailer Ebrath 2017114035 \n Eliecer Zúñiga Ortiz 2017114120 \n Rubén Darío Fernández de castro ");
 		break;
 	}
 	case 3: {
