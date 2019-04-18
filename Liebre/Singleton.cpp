@@ -349,7 +349,7 @@ void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 	}
 	case 2: {
 		//ac� debes escribir las reglas
-		al_draw_multiline_text(fuente, al_map_rgb(214, 19, 36), 300, 40, 550, 25, ALLEGRO_ALIGN_CENTER, "Integrantes \n\n Ernesto García Fernandez de castro 2018114029 \n Dailer Ebrath 2017114035 \n Eliecer Zúñiga Ortiz 2017114120 \n Rubén Darío Fernández de castro ");
+		al_draw_multiline_text(fuente, al_map_rgb(214, 19, 36), 320, 140, 550, 25, ALLEGRO_ALIGN_CENTER, "Integrantes \n\n Ernesto García Fernandez de castro 2018114029 \n Dailer Ebrath 2017114035 \n Eliecer Zúñiga Ortiz 2017114120 \n Rubén Darío Fernández de castro ");
 		break;
 	}
 	case 3: {
