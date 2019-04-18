@@ -68,6 +68,8 @@ public:
 
 	ALLEGRO_BITMAP *ganaste;
 	ALLEGRO_BITMAP *perdiste;
+	ALLEGRO_BITMAP *mapa2;
+	bool atras;
 	/*-----------mapa ptr----------*/
 
 	bool dibujar; // es verdadero cuando se quiere actualizar la pantalla

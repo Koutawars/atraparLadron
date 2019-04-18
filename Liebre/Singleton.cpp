@@ -20,6 +20,7 @@ void Singleton::IniciarValiarbles() {
 		matrix = std::vector< std::vector<const char*> >(5);
 		temp = std::vector< std::vector<Vertice*> >(5);
 		mapa = al_load_bitmap("tablero.png");
+		mapa2 = al_load_bitmap("tablero1.png");
 		jugador = al_load_bitmap("fichaPerro.png");
 		iaBitmap = al_load_bitmap("fichaGato.png");
 		libre = al_load_bitmap("libre.png");
@@ -27,6 +28,7 @@ void Singleton::IniciarValiarbles() {
 		perdiste = al_load_bitmap("perdiste.png");
 		select = NULL;
 		turno = true;
+		atras = false;
 		muertes = 0;
 		comenzarContador = true;
 		break;
@@ -91,11 +93,16 @@ void Singleton::refrescar(ALLEGRO_EVENT ev, bool *done) {
 		}
 		case 1:
 		{
-			if (input.isKeyPressed(ev, ALLEGRO_KEY_BACKSPACE)) {
-				ControladorScreen(0);
-			}
-			if (input.isKeyPressed(ev, ALLEGRO_KEY_F5)) {
-				ControladorScreen(1);
+			if (ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+				int mouseX = ev.mouse.x;
+				int mouseY = ev.mouse.y;
+				if (mouseX > 552 && mouseX < 625 && mouseY > 440 && mouseY < 470) {
+					atras = true;
+					dibujar = true;
+				}
+				else {
+					atras = false;
+				}
 			}
 			if ( this->turno == true && this->mato==false)
 			{
@@ -278,7 +285,8 @@ void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 	}
 	case 1: {
 		// dibujo el fondo
-		al_draw_bitmap(mapa, 0, 0, NULL);
+		if(!atras)al_draw_bitmap(mapa, 0, 0, NULL);
+		else al_draw_bitmap(mapa2, 0, 0, NULL);
 		Vertice* aux = this->ptr, *aux2 = NULL;
 		if (this->piensa == true) {
 			al_rest(0.8);
