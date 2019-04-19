@@ -25,7 +25,7 @@ public:
 	void IniciarValiarbles();
 	void traerContenido();
 	void destruirContenido();
-	void refrescar(ALLEGRO_EVENT ev, bool *done);
+	void refrescar(ALLEGRO_EVENT evenetos_de_allegro, bool *done);
 	void refrescarPantalla(ALLEGRO_DISPLAY *display);
 	int contador = 0;
 	bool comenzarContador = false;

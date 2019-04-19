@@ -45,16 +45,16 @@ void Singleton::IniciarValiarbles() {
 	}
 }
 
-void Singleton::refrescar(ALLEGRO_EVENT ev, bool *done) {
+void Singleton::refrescar(ALLEGRO_EVENT evenetos_de_allegro, bool *done) {
 	switch (pantalla) {
 		case 0: // Menu
 		{
-			if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+			if (evenetos_de_allegro.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 			{
-				if (ev.mouse.button & 1)
+				if (evenetos_de_allegro.mouse.button & 1)
 				{
-					// ev.mouse.x ev.mouse.pociciony evento del mouse
-					int mouseY = ev.mouse.y;
+					// evenetos_de_allegro.mouse.x evenetos_de_allegro.mouse.pociciony evento del mouse
+					int mouseY = evenetos_de_allegro.mouse.y;
 					int i = 0;
 					for (auto texto : *menu) {
 						if (mouseY >= texto->y && mouseY <= texto->y + 35) {
@@ -74,8 +74,8 @@ void Singleton::refrescar(ALLEGRO_EVENT ev, bool *done) {
 					}
 				}
 			}
-			if (ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
-				int mouseY = ev.mouse.y;
+			if (evenetos_de_allegro.type == ALLEGRO_EVENT_MOUSE_AXES) {
+				int mouseY = evenetos_de_allegro.mouse.y;
 				int i = 0;
 				for (auto texto : *menu) {
 					if (mouseY >= texto->y && mouseY <= texto->y + 35) {
@@ -91,9 +91,9 @@ void Singleton::refrescar(ALLEGRO_EVENT ev, bool *done) {
 		}
 		case 1:
 		{
-			if (ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
-				int mouseX = ev.mouse.x;
-				int mouseY = ev.mouse.y;
+			if (evenetos_de_allegro.type == ALLEGRO_EVENT_MOUSE_AXES) {
+				int mouseX = evenetos_de_allegro.mouse.x;
+				int mouseY = evenetos_de_allegro.mouse.y;
 				if (mouseX > 552 && mouseX < 625 && mouseY > 440 && mouseY < 470) {
 					atras = true;
 					dibujar = true;
@@ -104,11 +104,11 @@ void Singleton::refrescar(ALLEGRO_EVENT ev, bool *done) {
 			}
 			if ( this->turno == true && this->mato==false)
 			{
-				if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-					if (ev.mouse.button & 1)
+				if (evenetos_de_allegro.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+					if (evenetos_de_allegro.mouse.button & 1)
 					{
-						int mouseX = ev.mouse.x;
-						int mouseY = ev.mouse.y;
+						int mouseX = evenetos_de_allegro.mouse.x;
+						int mouseY = evenetos_de_allegro.mouse.y;
 						Vertice* auxiliar = this->ptr, * aux2 = NULL;
 						while (auxiliar != NULL) {
 							while (auxiliar != NULL) {
@@ -236,27 +236,27 @@ void Singleton::refrescar(ALLEGRO_EVENT ev, bool *done) {
 		}
 		case 2:
 		{
-			if (input.isKeyPressed(ev, ALLEGRO_KEY_BACKSPACE)) {
+			if (input.isKeyPressed(evenetos_de_allegro, ALLEGRO_KEY_BACKSPACE)) {
 				ControladorScreen(0);
 			}
 			break;
 		}
 		case 3:
 		{
-			if (input.isKeyPressed(ev, ALLEGRO_KEY_Q)) {
+			if (input.isKeyPressed(evenetos_de_allegro, ALLEGRO_KEY_Q)) {
 				orientacion = 0;
 				ControladorScreen(1);
 			}
-			else if(input.isKeyPressed(ev, ALLEGRO_KEY_W)){
+			else if(input.isKeyPressed(evenetos_de_allegro, ALLEGRO_KEY_W)){
 				orientacion = 1;
 				ControladorScreen(1);
 
 			}
-			else if (input.isKeyPressed(ev, ALLEGRO_KEY_E)) {
+			else if (input.isKeyPressed(evenetos_de_allegro, ALLEGRO_KEY_E)) {
 				orientacion = 2;
 				ControladorScreen(1);
 			}
-			else if (input.isKeyPressed(ev, ALLEGRO_KEY_R)) {
+			else if (input.isKeyPressed(evenetos_de_allegro, ALLEGRO_KEY_R)) {
 				orientacion = 3;
 				ControladorScreen(1);
 			}
