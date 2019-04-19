@@ -787,6 +787,6 @@ void Singleton::destruirContenido() {
 	}
 }
 
-bool Singleton::isConectado(Vertice *seleccionada, Vertice *b) {
-	return (seleccionada->sur == b || seleccionada->este == b || seleccionada->oeste == b ||  seleccionada->norte == b || seleccionada->sureste == b || seleccionada->suroeste == b || seleccionada->noreste == b || seleccionada->noroeste == b);
+bool Singleton::isConectado(Vertice *seleccionada, Vertice *otro) {
+	return (seleccionada->sur == otro || seleccionada->este == otro || seleccionada->oeste == otro ||  seleccionada->norte == otro || seleccionada->sureste == otro || seleccionada->suroeste == otro || seleccionada->noreste == otro || seleccionada->noroeste == otro);
 }
