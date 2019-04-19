@@ -10,11 +10,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="Liebre.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Texto.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="vertice.h" />
+    <ClInclude Include="Ladron.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -21,8 +21,8 @@ void Singleton::IniciarValiarbles() {
 		temp = std::vector< std::vector<Vertice*> >(5);
 		mapa = al_load_bitmap("tablero.png");
 		mapa2 = al_load_bitmap("tablero1.png");
-		jugador = al_load_bitmap("fichaPerro.png");
-		iaBitmap = al_load_bitmap("fichaGato.png");
+		jugador = al_load_bitmap("police.png");
+		iaBitmap = al_load_bitmap("ladron.png");
 		libre = al_load_bitmap("libre.png");
 		ganaste = al_load_bitmap("ganaste.png");
 		perdiste = al_load_bitmap("perdiste.png");
@@ -34,15 +34,13 @@ void Singleton::IniciarValiarbles() {
 		break;
 
 	case 2:
-		fuente = al_load_font("big_noodle_titling.ttf", 25, NULL);
+		fuente = al_load_font("big_noodle_titling.ttf", 30, NULL);
+		fondoCrea = al_load_bitmap("crea.png");
 		break;
 	case 3:
 		orientacion = 0;
-		choose.push_back(al_load_bitmap("choose0.png"));
-		choose.push_back(al_load_bitmap("choose1.png"));
-		choose.push_back(al_load_bitmap("choose2.png"));
-		choose.push_back(al_load_bitmap("choose3.png"));
-		choose.push_back(al_load_bitmap("choose.png"));
+		orienta = al_load_bitmap("orienta.png");
+
 		break;
 	}
 }
@@ -245,21 +243,22 @@ void Singleton::refrescar(ALLEGRO_EVENT ev, bool *done) {
 		}
 		case 3:
 		{
-			if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-			{
-				if (ev.mouse.button & 1)
-				{
-					int mouseX = ev.mouse.x;
-					int mouseY = ev.mouse.y;
-					for (int i = 0; i < 2; i++) {
-						for (int j = 0; j < 2; j++) {
-							if (mouseX > 89 + (332 * i) && mouseX < 89 + (332 * i) + 153 && mouseY > 88 + (216 * j) && mouseY < 88 + (216 * j) + 153) {
-								orientacion = i + j*2;
-								ControladorScreen(1);
-							}
-						}
-					}
-				}
+			if (input.isKeyPressed(ev, ALLEGRO_KEY_Q)) {
+				orientacion = 0;
+				ControladorScreen(1);
+			}
+			else if(input.isKeyPressed(ev, ALLEGRO_KEY_W)){
+				orientacion = 1;
+				ControladorScreen(1);
+
+			}
+			else if (input.isKeyPressed(ev, ALLEGRO_KEY_E)) {
+				orientacion = 2;
+				ControladorScreen(1);
+			}
+			else if (input.isKeyPressed(ev, ALLEGRO_KEY_R)) {
+				orientacion = 3;
+				ControladorScreen(1);
 			}
 			break;
 		}
@@ -348,17 +347,13 @@ void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 		break;
 	}
 	case 2: {
-		//ac� debes escribir las reglas
-		al_draw_multiline_text(fuente, al_map_rgb(214, 19, 36), 300, 40, 550, 25, ALLEGRO_ALIGN_CENTER, "Integrantes \n\n Ernesto García Fernandez de castro 2018114029 \n Dailer Ebrath 2017114035 \n Eliecer Zúñiga Ortiz 2017114120 \n Rubén Darío Fernández de castro ");
+		al_draw_bitmap(fondoCrea, 0, 0, NULL);
+		al_draw_multiline_text(fuente, al_map_rgb(0, 0, 0), 320, 80, 550, 25, ALLEGRO_ALIGN_CENTER, "Integrantes \n\n Ernesto García Fernandez de castro 2018114029 \n Dailer Ebrath 2017114035 \n Eliecer Zúñiga Ortiz 2017114120 \n Rubén Darío Fernández de castro 2018114024");
 		break;
 	}
 	case 3: {
-		al_draw_bitmap(choose[4], 0, 0, NULL);
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				al_draw_bitmap(choose[i*2+j], 89 + (332 * i), 88 + (216 * j), NULL);
-			}
-		}
+		al_draw_bitmap(orienta, 0, 0, NULL);
+		break;
 	}
 	}
 
@@ -604,9 +599,12 @@ void Singleton::destruirContenido() {
 		temp.clear();
 
 		break;
+	case 2:
+		al_destroy_font(fuente);
+		al_destroy_bitmap(fondoCrea);
+		break;
 	case 3: {
-		for (int i = 0; i < choose.size(); i++) al_destroy_bitmap(choose[i]);
-		choose.clear();
+		al_destroy_bitmap(orienta);
 		break;
 	}
 	}

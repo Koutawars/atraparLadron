@@ -59,7 +59,6 @@ public:
 	ALLEGRO_BITMAP *libre; // imagen donde hay un espacio libre para mover
 	void ConectarApuntadores(Vertice* ficha1, Vertice* ficha2, int direccion); // función para crear caminos de un nodo a otro
 	bool isConectado(Vertice *select, Vertice* b); // función para saber si un nodo es adyacente de otro o no
-	std::vector <ALLEGRO_BITMAP*> choose;
 	// matrices temporales del mapa
 	std::vector< std::vector<const char*> > matrix;
 	std::vector< std::vector<Vertice*> > temp;
@@ -68,7 +67,9 @@ public:
 
 	ALLEGRO_BITMAP *ganaste;
 	ALLEGRO_BITMAP *perdiste;
-	ALLEGRO_BITMAP *mapa2;
+	ALLEGRO_BITMAP *mapa2; // imagen de mapa cuando pasa el mouse sobre el boton atras
+	ALLEGRO_BITMAP *orienta; // mapa de fondo de orientacion
+	ALLEGRO_BITMAP *fondoCrea;
 	bool atras;
 	/*-----------mapa ptr----------*/
 
