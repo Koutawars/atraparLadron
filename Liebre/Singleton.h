@@ -57,7 +57,7 @@ public:
 	ALLEGRO_BITMAP *jugador; // imagen del jugador
 	ALLEGRO_BITMAP *iaBitmap; // imagen de la ia
 	ALLEGRO_BITMAP *libre; // imagen donde hay un espacio libre para mover
-	void ConectarApuntadores(Vertice* ficha1, Vertice* ficha2, int direccion); // función para crear caminos de un nodo a otro
+	void ConectarApuntadores(Vertice* vertice1, Vertice* vertice2, int direccion); // función para crear caminos de un nodo a otro
 	bool isConectado(Vertice *select, Vertice* b); // función para saber si un nodo es adyacente de otro o no
 	// matrices temporales del mapa
 	std::vector< std::vector<const char*> > matrix;

@@ -3,6 +3,182 @@
 Singleton::Singleton() {}
 Singleton::~Singleton() {}
 
+// mata 
+void Singleton::robar() {
+	if (this->gato->este != NULL && mato == false) {
+		if (this->gato->este->personaje == 1) {
+			if (this->gato->este->este != NULL) {
+				if (this->gato->este->este->personaje == 0) {
+					this->gato->este->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->este->este->personaje = 2;
+					this->gato = this->gato->este->este;
+					this->turno = true;
+					this->mato = true;
+				}
+			}
+		}
+	}
+	if (this->gato->sureste != NULL && mato == false) {
+		if (this->gato->sureste->personaje == 1) {
+			if (this->gato->sureste->sureste != NULL) {
+				if (this->gato->sureste->sureste->personaje == 0) {
+					this->gato->sureste->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->sureste->sureste->personaje = 2;
+					this->gato = this->gato->sureste->sureste;
+					this->turno = true;
+					this->mato = true;
+				}
+			}
+		}
+	}
+	if (this->gato->sur != NULL && mato == false) {
+		if (this->gato->sur->personaje == 1) {
+			if (this->gato->sur->sur != NULL) {
+				if (this->gato->sur->sur->personaje == 0) {
+					this->gato->sur->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->sur->sur->personaje = 2;
+					this->gato = this->gato->sur->sur;
+					this->turno = true;
+					this->mato = true;
+				}
+			}
+		}
+	}
+	if (this->gato->suroeste != NULL && mato == false) {
+		if (this->gato->suroeste->personaje == 1) {
+			if (this->gato->suroeste->suroeste != NULL) {
+				if (this->gato->suroeste->suroeste->personaje == 0) {
+					this->gato->suroeste->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->suroeste->suroeste->personaje = 2;
+					this->gato = this->gato->suroeste->suroeste;
+					this->turno = true;
+					this->mato = true;
+				}
+			}
+		}
+	}
+	if (this->gato->oeste != NULL && mato == false) {
+		if (this->gato->oeste->personaje == 1) {
+			if (this->gato->oeste->oeste != NULL) {
+				if (this->gato->oeste->oeste->personaje == 0) {
+					this->gato->oeste->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->oeste->oeste->personaje = 2;
+					this->gato = this->gato->oeste->oeste;
+					this->turno = true;
+					this->mato = true;
+				}
+			}
+		}
+	}
+	if (this->gato->noroeste != NULL && mato == false) {
+		if (this->gato->noroeste->personaje == 1) {
+			if (this->gato->noroeste->noroeste != NULL) {
+				if (this->gato->noroeste->noroeste->personaje == 0) {
+					this->gato->noroeste->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->noroeste->noroeste->personaje = 2;
+					this->gato = this->gato->noroeste->noroeste;
+					this->turno = true;
+					this->mato = true;
+				}
+			}
+		}
+	}
+	if (this->gato->norte != NULL && mato == false) {
+		if (this->gato->norte->personaje == 1) {
+			if (this->gato->norte->norte != NULL) {
+				if (this->gato->norte->norte->personaje == 0) {
+					this->gato->norte->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->norte->norte->personaje = 2;
+					this->gato = this->gato->norte->norte;
+					this->turno = true;
+					this->mato = true;
+				}
+			}
+		}
+	}
+	if (this->gato->noreste != NULL && mato == false) {
+		if (this->gato->noreste->personaje == 1) {
+			if (this->gato->noreste->noreste != NULL) {
+				if (this->gato->noreste->noreste->personaje == 0) {
+					this->gato->noreste->personaje = 0;
+					this->gato->personaje = 0;
+					this->gato->noreste->noreste->personaje = 2;
+					this->gato = this->gato->noreste->noreste;
+					this->turno = true;
+					this->mato = true;
+				}
+			}
+		}
+	}
+	if (mato) {
+		muertes++;
+	}
+}
+
+// recuperar el singleton
+Singleton& Singleton::recuperarSingleton()
+{
+	static Singleton instance;
+	return instance;
+}
+
+// funci�n para cambiar screen
+void Singleton::ControladorScreen(int screen) {
+	this->destruirContenido();
+	this->pantalla = screen;
+	this->IniciarValiarbles();
+	this->traerContenido();
+	dibujar = true;
+}
+
+// funci�n para crear un camino de doble v�a
+void Singleton::ConectarApuntadores(Vertice* vertice1, Vertice* vertice2, int direccion) {
+	switch (direccion)
+	{
+	case 0:
+		vertice1->este = vertice2;
+		vertice2->oeste = vertice1;
+		break;
+	case 1:
+		vertice1->sureste = vertice2;
+		vertice2->noroeste = vertice1;
+		break;
+	case 2:
+		vertice1->sur = vertice2;
+		vertice2->norte = vertice1;
+		break;
+	case 3:
+		vertice1->suroeste = vertice2;
+		vertice2->noreste = vertice1;
+		break;
+	case 4:
+		vertice1->oeste = vertice2;
+		vertice2->este = vertice1;
+		break;
+	case 5:
+		vertice1->noroeste = vertice2;
+		vertice2->sureste = vertice1;
+		break;
+	case 6:
+		vertice1->norte = vertice2;
+		vertice2->sur = vertice1;
+		break;
+	case 7:
+		vertice1->noreste = vertice2;
+		vertice2->suroeste = vertice1;
+		break;
+	default:
+		break;
+	}
+}
+
 void Singleton::IniciarValiarbles() {
 	dibujar = true;
 	comenzarContador = false;
@@ -521,7 +697,7 @@ void Singleton::traerContenido(){
 		for (int i = 0; i < 5; i++)
 		{
 			for (int j = 0; j < 5; j++) {
-				// conversi�n de string ficha1 entero de la matrix
+				// conversi�n de string vertice1 entero de la matrix
 				std::stringstream strValue;
 				strValue << matrix[i][j][0];
 				int intValue;
@@ -608,182 +784,6 @@ void Singleton::destruirContenido() {
 		al_destroy_bitmap(orienta);
 		break;
 	}
-	}
-}
-
-// mata 
-void Singleton::robar() {
-	if (this->gato->este != NULL && mato==false) {
-		if (this->gato->este->personaje == 1) {
-			if (this->gato->este->este != NULL) {
-				if (this->gato->este->este->personaje == 0) {
-					this->gato->este->personaje = 0;
-					this->gato->personaje = 0;
-					this->gato->este->este->personaje = 2;
-					this->gato = this->gato->este->este;
-					this->turno = true;
-					this->mato = true;	
-				}
-			}
-		}
-	}
-	if (this->gato->sureste != NULL && mato == false) {
-		if (this->gato->sureste->personaje == 1) {
-			if (this->gato->sureste->sureste != NULL) {
-				if (this->gato->sureste->sureste->personaje == 0) {
-					this->gato->sureste->personaje = 0;
-					this->gato->personaje = 0;
-					this->gato->sureste->sureste->personaje = 2;
-					this->gato = this->gato->sureste->sureste;
-					this->turno = true;
-					this->mato = true;
-				}
-			}
-		}
-	}
-	if (this->gato->sur != NULL && mato == false) {
-		if (this->gato->sur->personaje == 1) {
-			if (this->gato->sur->sur != NULL) {
-				if (this->gato->sur->sur->personaje == 0) {
-					this->gato->sur->personaje = 0;
-					this->gato->personaje = 0;
-					this->gato->sur->sur->personaje = 2;
-					this->gato = this->gato->sur->sur;
-					this->turno = true;
-					this->mato = true;
-				}
-			}
-		}
-	}
-	if (this->gato->suroeste != NULL && mato == false) {
-		if (this->gato->suroeste->personaje == 1) {
-			if (this->gato->suroeste->suroeste != NULL) {
-				if (this->gato->suroeste->suroeste->personaje == 0) {
-					this->gato->suroeste->personaje = 0;
-					this->gato->personaje = 0;
-					this->gato->suroeste->suroeste->personaje = 2;
-					this->gato = this->gato->suroeste->suroeste;
-					this->turno = true;
-					this->mato = true;
-				}
-			}
-		}
-	}
-	if (this->gato->oeste != NULL && mato == false) {
-		if (this->gato->oeste->personaje == 1) {
-			if (this->gato->oeste->oeste != NULL) {
-				if (this->gato->oeste->oeste->personaje == 0) {
-					this->gato->oeste->personaje = 0;
-					this->gato->personaje = 0;
-					this->gato->oeste->oeste->personaje = 2;
-					this->gato = this->gato->oeste->oeste;
-					this->turno = true;
-					this->mato = true;
-				}
-			}
-		}
-	}
-	if (this->gato->noroeste != NULL && mato == false) {
-		if (this->gato->noroeste->personaje == 1) {
-			if (this->gato->noroeste->noroeste != NULL) {
-				if (this->gato->noroeste->noroeste->personaje == 0) {
-					this->gato->noroeste->personaje = 0;
-					this->gato->personaje = 0;
-					this->gato->noroeste->noroeste->personaje = 2;
-					this->gato = this->gato->noroeste->noroeste;
-					this->turno = true;
-					this->mato = true;
-				}
-			}
-		}
-	}
-	if (this->gato->norte != NULL && mato == false) {
-		if (this->gato->norte->personaje == 1) {
-			if (this->gato->norte->norte != NULL) {
-				if (this->gato->norte->norte->personaje == 0) {
-					this->gato->norte->personaje = 0;
-					this->gato->personaje = 0;
-					this->gato->norte->norte->personaje = 2;
-					this->gato = this->gato->norte->norte;
-					this->turno = true;
-					this->mato = true;
-				}
-			}
-		}
-	}
-	if (this->gato->noreste != NULL && mato == false) {
-		if (this->gato->noreste->personaje == 1) {
-			if (this->gato->noreste->noreste != NULL) {
-				if (this->gato->noreste->noreste->personaje == 0) {
-					this->gato->noreste->personaje = 0;
-					this->gato->personaje = 0;
-					this->gato->noreste->noreste->personaje = 2;
-					this->gato = this->gato->noreste->noreste;
-					this->turno = true;
-					this->mato = true;
-				}
-			}
-		}
-	}
-	if (mato) {
-		muertes++;
-	}
-}
-
-// recuperar el singleton
-Singleton &Singleton::recuperarSingleton()
-{
-	static Singleton instance;
-	return instance;
-}
-
-// funci�n para cambiar screen
-void Singleton::ControladorScreen(int screen) {
-	this->destruirContenido();
-	this->pantalla = screen;
-	this->IniciarValiarbles();
-	this->traerContenido();
-	dibujar = true;
-}
-
-// funci�n para crear un camino de doble v�a
-void Singleton::ConectarApuntadores(Vertice* ficha1, Vertice* ficha2, int direccion) {
-	switch (direccion)
-	{
-	case 0:
-		ficha1->este = ficha2;
-		ficha2->oeste = ficha1;
-		break;
-	case 1:
-		ficha1->sureste = ficha2;
-		ficha2->noroeste = ficha1;
-		break;
-	case 2:
-		ficha1->sur = ficha2;
-		ficha2->norte = ficha1;
-		break;
-	case 3:
-		ficha1->suroeste = ficha2;
-		ficha2->noreste = ficha1;
-		break;
-	case 4:
-		ficha1->oeste = ficha2;
-		ficha2->este = ficha1;
-		break;
-	case 5:
-		ficha1->noroeste = ficha2;
-		ficha2->sureste = ficha1;
-		break;
-	case 6:
-		ficha1->norte = ficha2;
-		ficha2->sur = ficha1;
-		break;
-	case 7:
-		ficha1->noreste = ficha2;
-		ficha2->suroeste = ficha1;
-		break;
-	default:
-		break;
 	}
 }
 
