@@ -15,7 +15,7 @@ Vertice* Vertice::verificar()
 	return NULL;
 }
 
-Vertice::Vertice(int pocicionX,int y,int personaje)
+Vertice::Vertice(int pocicionX,int pociciony,int personaje)
 {
 	this->norte = NULL;
 	this->sur = NULL;
@@ -26,13 +26,13 @@ Vertice::Vertice(int pocicionX,int y,int personaje)
 	this->noreste = NULL;
 	this->sureste = NULL;
 	this->pocicionX = pocicionX;
-	this->y = y;
+	this->pociciony = pociciony;
 	this->personaje = personaje;
 }
 
 std::string Vertice::imprimir() {
 	std::ostringstream result;
-	result << "pocicionX->[" << this->pocicionX << "] - " << "y->[" << this->y << "] - " << "personaje->[" << this->personaje << "]";
+	result << "pocicionX->[" << this->pocicionX << "] - " << "pociciony->[" << this->pociciony << "] - " << "personaje->[" << this->personaje << "]";
 	return result.str();
 }
 

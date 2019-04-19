@@ -5,7 +5,7 @@ class Vertice
 {
 public:
 	int pocicionX;
-	int y;
+	int pociciony;
 	Vertice* norte; // arriba
 	Vertice* sur; // abajo
 	Vertice* este; // derecha
@@ -18,7 +18,7 @@ public:
 	Vertice* mover();
 
 	Vertice* verificar();
-	Vertice(int pocicionX, int y, int personaje);
+	Vertice(int pocicionX, int pociciony, int personaje);
 	std::string imprimir();
 	~Vertice();
 

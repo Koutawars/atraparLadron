@@ -53,7 +53,7 @@ void Singleton::refrescar(ALLEGRO_EVENT ev, bool *done) {
 			{
 				if (ev.mouse.button & 1)
 				{
-					// ev.mouse.x ev.mouse.y evento del mouse
+					// ev.mouse.x ev.mouse.pociciony evento del mouse
 					int mouseY = ev.mouse.y;
 					int i = 0;
 					for (auto texto : *menu) {
@@ -109,51 +109,51 @@ void Singleton::refrescar(ALLEGRO_EVENT ev, bool *done) {
 					{
 						int mouseX = ev.mouse.x;
 						int mouseY = ev.mouse.y;
-						Vertice* aux = this->ptr, * aux2 = NULL;
-						while (aux != NULL) {
-							while (aux != NULL) {
-								if (aux->personaje == 1) {
-									if (mouseX > aux->pocicionX && mouseX < aux->pocicionX + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
-										select = aux;
+						Vertice* auxiliar = this->ptr, * aux2 = NULL;
+						while (auxiliar != NULL) {
+							while (auxiliar != NULL) {
+								if (auxiliar->personaje == 1) {
+									if (mouseX > auxiliar->pocicionX && mouseX < auxiliar->pocicionX + 46 && mouseY > auxiliar->pociciony && mouseY < auxiliar->pociciony + 34) {
+										select = auxiliar;
 										dibujar = true;
 									}
 								}
-								else if (aux->personaje == 0 && select != NULL && isConectado(select, aux)) {
-									if (mouseX > aux->pocicionX && mouseX < aux->pocicionX + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
-										aux->personaje = select->personaje;
+								else if (auxiliar->personaje == 0 && select != NULL && isConectado(select, auxiliar)) {
+									if (mouseX > auxiliar->pocicionX && mouseX < auxiliar->pocicionX + 46 && mouseY > auxiliar->pociciony && mouseY < auxiliar->pociciony + 34) {
+										auxiliar->personaje = select->personaje;
 										select->personaje = 0;
 										select = NULL;
 										dibujar = true;
 										this->turno = false;
 									}
 								}
-								aux2 = aux;
-								aux = aux->este;
+								aux2 = auxiliar;
+								auxiliar = auxiliar->este;
 							}
-							aux = aux2;
-							if (aux->sur == NULL)break;
-							aux = aux->sur;
-							while (aux != NULL) {
-								if (aux->personaje == 1) {
-									if (mouseX > aux->pocicionX && mouseX < aux->pocicionX + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
-										select = aux;
+							auxiliar = aux2;
+							if (auxiliar->sur == NULL)break;
+							auxiliar = auxiliar->sur;
+							while (auxiliar != NULL) {
+								if (auxiliar->personaje == 1) {
+									if (mouseX > auxiliar->pocicionX && mouseX < auxiliar->pocicionX + 46 && mouseY > auxiliar->pociciony && mouseY < auxiliar->pociciony + 34) {
+										select = auxiliar;
 										dibujar = true;
 									}
 								}
-								else if (aux->personaje == 0 && select != NULL && isConectado(select, aux)) {
-									if (mouseX > aux->pocicionX && mouseX < aux->pocicionX + 45 && mouseY > aux->y && mouseY < aux->y + 35) {
-										aux->personaje = select->personaje;
+								else if (auxiliar->personaje == 0 && select != NULL && isConectado(select, auxiliar)) {
+									if (mouseX > auxiliar->pocicionX && mouseX < auxiliar->pocicionX + 46 && mouseY > auxiliar->pociciony && mouseY < auxiliar->pociciony + 34) {
+										auxiliar->personaje = select->personaje;
 										select->personaje = 0;
 										select = NULL;
 										dibujar = true;
 										this->turno = false;
 									}
 								}
-								aux2 = aux;
-								aux = aux->oeste;
+								aux2 = auxiliar;
+								auxiliar = auxiliar->oeste;
 							}
-							aux = aux2;
-							aux = aux->sur;
+							auxiliar = aux2;
+							auxiliar = auxiliar->sur;
 						}
 						if (select != NULL && !dibujar) {
 							select = NULL;
@@ -291,18 +291,18 @@ void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 			al_rest(0.8);
 			piensa = false;
 		}
-		// recorro los nodos y los dibujo 
+		// recorro los nodos pociciony los dibujo 
 		while (aux != NULL) {
 			while (aux != NULL) {
 				if (aux->personaje == 1) {
-					al_draw_bitmap(jugador, aux->pocicionX, aux->y, ALLEGRO_ALIGN_CENTER);
+					al_draw_bitmap(jugador, aux->pocicionX, aux->pociciony, ALLEGRO_ALIGN_CENTER);
 				}
 				else if (aux->personaje == 2) {
-					al_draw_bitmap(iaBitmap, aux->pocicionX, aux->y, ALLEGRO_ALIGN_CENTER);
+					al_draw_bitmap(iaBitmap, aux->pocicionX, aux->pociciony, ALLEGRO_ALIGN_CENTER);
 				}
 				else if (select != NULL) {
 					if (isConectado(select, aux))
-						al_draw_bitmap(libre, aux->pocicionX, aux->y, ALLEGRO_ALIGN_CENTER);
+						al_draw_bitmap(libre, aux->pocicionX, aux->pociciony, ALLEGRO_ALIGN_CENTER);
 				}
 				aux2 = aux;
 				aux = aux->este;
@@ -312,14 +312,14 @@ void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 			aux = aux->sur;
 			while (aux != NULL) {
 				if (aux->personaje == 1) {
-					al_draw_bitmap(jugador, aux->pocicionX, aux->y, ALLEGRO_ALIGN_CENTER);
+					al_draw_bitmap(jugador, aux->pocicionX, aux->pociciony, ALLEGRO_ALIGN_CENTER);
 				}
 				else if (aux->personaje == 2) {
-					al_draw_bitmap(iaBitmap, aux->pocicionX, aux->y, ALLEGRO_ALIGN_CENTER);
+					al_draw_bitmap(iaBitmap, aux->pocicionX, aux->pociciony, ALLEGRO_ALIGN_CENTER);
 				}
 				else if (select != NULL) {
 					if (isConectado(select, aux))
-						al_draw_bitmap(libre, aux->pocicionX, aux->y, ALLEGRO_ALIGN_CENTER);
+						al_draw_bitmap(libre, aux->pocicionX, aux->pociciony, ALLEGRO_ALIGN_CENTER);
 				}
 				aux2 = aux;
 				aux = aux->oeste;
@@ -526,7 +526,7 @@ void Singleton::traerContenido(){
 				strValue << matrix[i][j][0];
 				int intValue;
 				strValue >> intValue;
-				// creaci�n del nodo su distancia(margin) y su posici�n de la esquina
+				// creaci�n del nodo su distancia(margin) pociciony su posici�n de la esquina
 				temp[i][j] = new Vertice((j * margin) + posX, (i * margin) + posY, intValue);
 			}
 		}
