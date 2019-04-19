@@ -329,6 +329,7 @@ void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 		}
 		al_draw_textf(impmuertes, al_map_rgb(0, 0, 0), 355, 10, ALLEGRO_ALIGN_LEFT, "Robados: %d", this->muertes);
 		if (muertes >= 3) {
+			al_flip_display();
 			al_rest(0.5);
 			al_draw_bitmap(perdiste, 0, 0, NULL);
 			al_flip_display();
