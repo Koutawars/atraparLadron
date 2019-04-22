@@ -34,7 +34,7 @@ public:
 	/*------------- Menu ------------*/
 	std::vector<Texto*> *menu; // vector de Texto para el menu
 	ALLEGRO_BITMAP *fondo;
-	ALLEGRO_FONT *fuente2;
+	ALLEGRO_FONT *tipoDeLetra2;
 	/*------------- Menu ------------*/
 
 	/*------------Pantalla-----------*/
@@ -60,8 +60,8 @@ public:
 	void ConectarApuntadores(Vertice* vertice1, Vertice* vertice2, int direccion); // función para crear caminos de un nodo a otro
 	bool isConectado(Vertice *seleccionada, Vertice* otro); // función para saber si un nodo es adyacente de otro o no
 	// matrices temporales del mapa
-	std::vector< std::vector<const char*> > matrix;
-	std::vector< std::vector<Vertice*> > temp;
+	std::vector< std::vector<const char*> > arregloMapa;
+	std::vector< std::vector<Vertice*> > listadevertices;
 	InputManager input;// input manager para las reclas
 	void robar(); //esto mata chabon
 
@@ -73,8 +73,8 @@ public:
 	bool atras;
 	/*-----------mapa ptr----------*/
 
-	bool dibujar; // es verdadero cuando se quiere actualizar la pantalla
-	ALLEGRO_FONT *fuente; // fuente que se utiliza en el menu
+	bool pintar; // es verdadero cuando se quiere actualizar la pantalla
+	ALLEGRO_FONT *tipodeletra; // tipodeletra que se utiliza en el menu
 	
 };
 

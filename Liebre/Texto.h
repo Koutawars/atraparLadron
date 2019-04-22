@@ -9,7 +9,7 @@ public:
 	std::string contenido;
 	Texto(std::string contenido);
 	Texto();
-	void draw(ALLEGRO_FONT *fuente, int r, int g, int b, int flags);
+	void draw(ALLEGRO_FONT *tipodeletra, int r, int g, int b, int flags);
 	bool select;
 	~Texto();
 };

@@ -14,8 +14,8 @@ Texto::Texto(std::string contenido)
 
 
 
-void Texto::draw(ALLEGRO_FONT *fuente, int r, int g, int b, int flags){
-	al_draw_text(fuente, al_map_rgb(r, g, b), this->pocicionX, this->y, flags, this->contenido.c_str());
+void Texto::draw(ALLEGRO_FONT *tipodeletra, int r, int g, int b, int flags){
+	al_draw_text(tipodeletra, al_map_rgb(r, g, b), this->pocicionX, this->y, flags, this->contenido.c_str());
 }
 
 

@@ -135,7 +135,7 @@ void Singleton::ControladorScreen(int screen) {
 	this->pantalla = screen;
 	this->IniciarValiarbles();
 	this->traerContenido();
-	dibujar = true;
+	pintar = true;
 }
 
 // funci�n para crear un camino de doble v�a
@@ -180,21 +180,21 @@ void Singleton::ConectarApuntadores(Vertice* vertice1, Vertice* vertice2, int di
 }
 
 void Singleton::IniciarValiarbles() {
-	dibujar = true;
+	pintar = true;
 	comenzarContador = false;
 	contador = 0;
 	switch (pantalla) {
 	case 0:
 		this->menu = new std::vector<Texto*>();
-		fuente = al_load_font("earwig factory rg.ttf", 36, NULL);
-		fuente2 = al_load_font("earwig factory rg.ttf", 45, NULL);
+		tipodeletra = al_load_font("earwig factory rg.ttf", 36, NULL);
+		tipoDeLetra2 = al_load_font("earwig factory rg.ttf", 45, NULL);
 		fondo = al_load_bitmap("fondo.png");
 		break;
 	case 1:
 		impmuertes = al_load_font("big_noodle_titling.ttf", 25, NULL);
-		fuente = al_load_font("earwig factory rg.ttf", 66, NULL);
-		matrix = std::vector< std::vector<const char*> >(5);
-		temp = std::vector< std::vector<Vertice*> >(5);
+		tipodeletra = al_load_font("earwig factory rg.ttf", 66, NULL);
+		arregloMapa = std::vector< std::vector<const char*> >(5);
+		listadevertices = std::vector< std::vector<Vertice*> >(5);
 		mapa = al_load_bitmap("tablero.png");
 		mapa2 = al_load_bitmap("tablero1.png");
 		jugador = al_load_bitmap("police.png");
@@ -210,7 +210,7 @@ void Singleton::IniciarValiarbles() {
 		break;
 
 	case 2:
-		fuente = al_load_font("big_noodle_titling.ttf", 30, NULL);
+		tipodeletra = al_load_font("big_noodle_titling.ttf", 30, NULL);
 		fondoCrea = al_load_bitmap("crea.png");
 		break;
 	case 3:
@@ -256,7 +256,7 @@ void Singleton::refrescar(ALLEGRO_EVENT evenetos_de_allegro, bool *done) {
 				for (auto texto : *menu) {
 					if (mouseY >= texto->y && mouseY <= texto->y + 35) {
 						texto->select = true;
-						dibujar = true;
+						pintar = true;
 					}
 					else {
 						texto->select = false;
@@ -272,7 +272,7 @@ void Singleton::refrescar(ALLEGRO_EVENT evenetos_de_allegro, bool *done) {
 				int mouseY = evenetos_de_allegro.mouse.y;
 				if (mouseX > 552 && mouseX < 625 && mouseY > 440 && mouseY < 470) {
 					atras = true;
-					dibujar = true;
+					pintar = true;
 				}
 				else {
 					atras = false;
@@ -291,7 +291,7 @@ void Singleton::refrescar(ALLEGRO_EVENT evenetos_de_allegro, bool *done) {
 								if (auxiliar->personaje == 1) {
 									if (mouseX > auxiliar->pocicionX && mouseX < auxiliar->pocicionX + 46 && mouseY > auxiliar->pociciony && mouseY < auxiliar->pociciony + 34) {
 										select = auxiliar;
-										dibujar = true;
+										pintar = true;
 									}
 								}
 								else if (auxiliar->personaje == 0 && select != NULL && isConectado(select, auxiliar)) {
@@ -299,7 +299,7 @@ void Singleton::refrescar(ALLEGRO_EVENT evenetos_de_allegro, bool *done) {
 										auxiliar->personaje = select->personaje;
 										select->personaje = 0;
 										select = NULL;
-										dibujar = true;
+										pintar = true;
 										this->turno = false;
 									}
 								}
@@ -313,7 +313,7 @@ void Singleton::refrescar(ALLEGRO_EVENT evenetos_de_allegro, bool *done) {
 								if (auxiliar->personaje == 1) {
 									if (mouseX > auxiliar->pocicionX && mouseX < auxiliar->pocicionX + 46 && mouseY > auxiliar->pociciony && mouseY < auxiliar->pociciony + 34) {
 										select = auxiliar;
-										dibujar = true;
+										pintar = true;
 									}
 								}
 								else if (auxiliar->personaje == 0 && select != NULL && isConectado(select, auxiliar)) {
@@ -321,7 +321,7 @@ void Singleton::refrescar(ALLEGRO_EVENT evenetos_de_allegro, bool *done) {
 										auxiliar->personaje = select->personaje;
 										select->personaje = 0;
 										select = NULL;
-										dibujar = true;
+										pintar = true;
 										this->turno = false;
 									}
 								}
@@ -331,9 +331,9 @@ void Singleton::refrescar(ALLEGRO_EVENT evenetos_de_allegro, bool *done) {
 							auxiliar = aux2;
 							auxiliar = auxiliar->sur;
 						}
-						if (select != NULL && !dibujar) {
+						if (select != NULL && !pintar) {
 							select = NULL;
-							dibujar = true;
+							pintar = true;
 						}
 
 						if (mouseX > 552 && mouseX < 625 && mouseY > 440 && mouseY < 470)
@@ -402,12 +402,12 @@ void Singleton::refrescar(ALLEGRO_EVENT evenetos_de_allegro, bool *done) {
 					}
 				}
 				this->piensa = true;
-				this->dibujar = true;
+				this->pintar = true;
 				this->turno = true;
 
 			}
 			if (contador >= tiempo)
-				dibujar = true;
+				pintar = true;
 			break;
 		}
 		case 2:
@@ -451,9 +451,9 @@ void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 		for (auto texto : *menu) {
 			// se pinta de diferente color si esta seleccionado 
 			if(texto->select)
-				texto->draw(fuente2, 214, 19, 36, ALLEGRO_ALIGN_CENTER);
+				texto->draw(tipoDeLetra2, 214, 19, 36, ALLEGRO_ALIGN_CENTER);
 			else
-				texto->draw(fuente, 255, 255, 255, ALLEGRO_ALIGN_CENTER);
+				texto->draw(tipodeletra, 255, 255, 255, ALLEGRO_ALIGN_CENTER);
 			i++;
 		}
 		break;
@@ -516,7 +516,7 @@ void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 		}
 
 		if (contador > tiempo) {
-			al_draw_text(fuente, al_map_rgb(0, 0, 0), 300, 200, ALLEGRO_ALIGN_CENTER, "TIME OUT!");
+			al_draw_text(tipodeletra, al_map_rgb(0, 0, 0), 300, 200, ALLEGRO_ALIGN_CENTER, "TIME OUT!");
 			al_flip_display();
 			al_rest(2);
 			ControladorScreen(0);
@@ -525,7 +525,7 @@ void Singleton::refrescarPantalla(ALLEGRO_DISPLAY *display) {
 	}
 	case 2: {
 		al_draw_bitmap(fondoCrea, 0, 0, NULL);
-		al_draw_multiline_text(fuente, al_map_rgb(0, 0, 0), 320, 80, 550, 25, ALLEGRO_ALIGN_CENTER, "Integrantes \n\n Ernesto García Fernandez de castro 2018114029 \n Dailer Ebrath 2017114035 \n Eliecer Zúñiga Ortiz 2017114120 \n Rubén Darío Fernández de castro 2018114024");
+		al_draw_multiline_text(tipodeletra, al_map_rgb(0, 0, 0), 320, 80, 550, 25, ALLEGRO_ALIGN_CENTER, "Integrantes \n\n Ernesto García Fernandez de castro 2018114029 \n Dailer Ebrath 2017114035 \n Eliecer Zúñiga Ortiz 2017114120 \n Rubén Darío Fernández de castro 2018114024");
 		break;
 	}
 	case 3: {
@@ -555,9 +555,9 @@ void Singleton::traerContenido(){
 	case 1:
 	{
 		for (int i = 0; i < 5; i++)
-			matrix[i].resize(5);
+			arregloMapa[i].resize(5);
 		for (int i = 0; i < 5; i++)
-			temp[i].resize(5);
+			listadevertices[i].resize(5);
 		int margin = 96, posX = 16, posY = 36;
 
 		// creaci�n del mapa
@@ -565,33 +565,34 @@ void Singleton::traerContenido(){
 		{
 		case 0:
 		{
+			arregloMapa[0][2] = "1.";
+			arregloMapa[1][2] = "0 ";
+			arregloMapa[2][2] = "2.";
+			arregloMapa[3][2] = "0 ";
+			arregloMapa[4][2] = "1.";
 			for (int i = 0; i < 5; i++)
 			{
 				for (int j = 0; j < 5; j++) {
 					if (i < 2) {
 						if ((j + i) % 2 == 0) {
-							matrix[j][i] = "1/";
+							arregloMapa[j][i] = "1.";
 						}
 						else {
-							matrix[j][i] = "1 ";
+							arregloMapa[j][i] = "1 ";
 						}
 					}
 					else
 					{
 						if ((i + j) % 2 == 0) {
-							matrix[j][i] = "0/";
+							arregloMapa[j][i] = "0.";
 						}
 						else {
-							matrix[j][i] = "0 ";
+							arregloMapa[j][i] = "0 ";
 						}
 					}
 				}
 			}
-			matrix[0][2] = "1/";
-			matrix[1][2] = "0 ";
-			matrix[2][2] = "2/";
-			matrix[3][2] = "0 ";
-			matrix[4][2] = "1/";
+			
 			break;
 
 		}
@@ -602,28 +603,28 @@ void Singleton::traerContenido(){
 				for (int j = 0; j < 5; j++) {
 					if (i > 2) {
 						if ((i + j) % 2 == 0) {
-							matrix[i][j] = "1/";
+							arregloMapa[i][j] = "1.";
 						}
 						else {
-							matrix[i][j] = "1 ";
+							arregloMapa[i][j] = "1 ";
 						}
 					}
 					else
 					{
 						if ((i + j) % 2 == 0) {
-							matrix[i][j] = "0/";
+							arregloMapa[i][j] = "0.";
 						}
 						else {
-							matrix[i][j] = "0 ";
+							arregloMapa[i][j] = "0 ";
 						}
 					}
 				}
 			}
-			matrix[2][0] = "1/";
-			matrix[2][1] = "0 ";
-			matrix[2][2] = "2/";
-			matrix[2][3] = "0 ";
-			matrix[2][4] = "1/";
+			arregloMapa[2][0] = "1.";
+			arregloMapa[2][1] = "0 ";
+			arregloMapa[2][2] = "2.";
+			arregloMapa[2][3] = "0 ";
+			arregloMapa[2][4] = "1.";
 			break;
 		}
 		case 2:
@@ -633,28 +634,28 @@ void Singleton::traerContenido(){
 				for (int j = 0; j < 5; j++) {
 					if (i < 2) {
 						if ((i + j) % 2 == 0) {
-							matrix[i][j] = "1/";
+							arregloMapa[i][j] = "1.";
 						}
 						else {
-							matrix[i][j] = "1 ";
+							arregloMapa[i][j] = "1 ";
 						}
 					}
 					else
 					{
 						if ((i + j) % 2 == 0) {
-							matrix[i][j] = "0/";
+							arregloMapa[i][j] = "0.";
 						}
 						else {
-							matrix[i][j] = "0 ";
+							arregloMapa[i][j] = "0 ";
 						}
 					}
 				}
 			}
-			matrix[2][0] = "1/";
-			matrix[2][1] = "0 ";
-			matrix[2][2] = "2/";
-			matrix[2][3] = "0 ";
-			matrix[2][4] = "1/";
+			arregloMapa[2][0] = "1.";
+			arregloMapa[2][1] = "0 ";
+			arregloMapa[2][2] = "2.";
+			arregloMapa[2][3] = "0 ";
+			arregloMapa[2][4] = "1.";
 			break;
 		}
 		case 3:
@@ -664,28 +665,28 @@ void Singleton::traerContenido(){
 				for (int j = 0; j < 5; j++) {
 					if (i > 2) {
 						if ((i + j) % 2 == 0) {
-							matrix[j][i] = "1/";
+							arregloMapa[j][i] = "1.";
 						}
 						else {
-							matrix[j][i] = "1 ";
+							arregloMapa[j][i] = "1 ";
 						}
 					}
 					else
 					{
 						if ((i + j) % 2 == 0) {
-							matrix[j][i] = "0/";
+							arregloMapa[j][i] = "0.";
 						}
 						else {
-							matrix[j][i] = "0 ";
+							arregloMapa[j][i] = "0 ";
 						}
 					}
 				}
 			}
-			matrix[0][2] = "1/";
-			matrix[1][2] = "0 ";
-			matrix[2][2] = "2/";
-			matrix[3][2] = "0 ";
-			matrix[4][2] = "1/";
+			arregloMapa[0][2] = "1.";
+			arregloMapa[1][2] = "0 ";
+			arregloMapa[2][2] = "2.";
+			arregloMapa[3][2] = "0 ";
+			arregloMapa[4][2] = "1.";
 
 			break;
 
@@ -697,55 +698,55 @@ void Singleton::traerContenido(){
 		for (int i = 0; i < 5; i++)
 		{
 			for (int j = 0; j < 5; j++) {
-				// conversi�n de string vertice1 entero de la matrix
+				// conversi�n de string vertice1 entero de la arregloMapa
 				std::stringstream strValue;
-				strValue << matrix[i][j][0];
+				strValue << arregloMapa[i][j][0];
 				int intValue;
 				strValue >> intValue;
 				// creaci�n del nodo su distancia(margin) pociciony su posici�n de la esquina
-				temp[i][j] = new Vertice((j * margin) + posX, (i * margin) + posY, intValue);
+				listadevertices[i][j] = new Vertice((j * margin) + posX, (i * margin) + posY, intValue);
 			}
 		}
-		this->gato = temp[2][2];
+		this->gato = listadevertices[2][2];
 		// conectando caminos entre nodos
 		for (int i = 0; i < 5; i++)
 		{
 			for (int j = 0; j < 5; j++)
 			{
-				if (matrix[i][j][1] == '/') {
+				if (arregloMapa[i][j][1] == '.') {
 					//derecha
 					if (j + 1 < 5) { 
-						ConectarApuntadores(temp[i][j], temp[i][j + 1], 0);
+						ConectarApuntadores(listadevertices[i][j], listadevertices[i][j + 1], 0);
 					}
 					//diagonal derecha inferior
 					if ((j + 1 < 5) && (i + 1 < 5)) {
-						ConectarApuntadores(temp[i][j], temp[i + 1][j + 1], 1);
+						ConectarApuntadores(listadevertices[i][j], listadevertices[i + 1][j + 1], 1);
 					}
 					//abajo
 					if (i + 1 < 5) {
-						ConectarApuntadores(temp[i][j], temp[i + 1][j], 2);
+						ConectarApuntadores(listadevertices[i][j], listadevertices[i + 1][j], 2);
 					}
 					//diagonal inferior izquierda
 					if ((i + 1) < 5 && (j - 1) > -1) {
-						ConectarApuntadores(temp[i][j], temp[i + 1][j - 1], 3);
+						ConectarApuntadores(listadevertices[i][j], listadevertices[i + 1][j - 1], 3);
 					}
 				}
 				else {
 					//derecha
 					if (j + 1 < 5) {
-						ConectarApuntadores(temp[i][j], temp[i][j + 1], 0);
+						ConectarApuntadores(listadevertices[i][j], listadevertices[i][j + 1], 0);
 					}
 					//abajo
 					if (i + 1 < 5) {
-						ConectarApuntadores(temp[i][j], temp[i + 1][j], 2);
+						ConectarApuntadores(listadevertices[i][j], listadevertices[i + 1][j], 2);
 					}
 				}
 			}
 		}
-		// imprimir matrix temporal
+		// imprimir arregloMapa temporal
 		
 		// colocando el primer nodo como padre
-		this->ptr = temp[0][0];
+		this->ptr = listadevertices[0][0];
 		break;
 	}
 	}
@@ -756,28 +757,28 @@ void Singleton::destruirContenido() {
 	switch (pantalla) {
 	case 0:
 		free(menu);
-		al_destroy_font(fuente);
+		al_destroy_font(tipodeletra);
 		al_destroy_bitmap(fondo);
-		al_destroy_font(fuente2);
+		al_destroy_font(tipoDeLetra2);
 		break;
 	case 1:
 		al_destroy_bitmap(mapa);
 		al_destroy_bitmap(jugador);
 		al_destroy_bitmap(iaBitmap);
 		al_destroy_bitmap(libre);
-		al_destroy_font(fuente);
+		al_destroy_font(tipodeletra);
 		al_destroy_bitmap(ganaste);
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
-				delete temp[i][j];
+				delete listadevertices[i][j];
 			}
 		}
-		matrix.clear();
-		temp.clear();
+		arregloMapa.clear();
+		listadevertices.clear();
 
 		break;
 	case 2:
-		al_destroy_font(fuente);
+		al_destroy_font(tipodeletra);
 		al_destroy_bitmap(fondoCrea);
 		break;
 	case 3: {
